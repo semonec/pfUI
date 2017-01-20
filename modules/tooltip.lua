@@ -43,7 +43,12 @@ pfUI.api:CreateBackdrop(GameTooltip)
         GameTooltip:ClearAllPoints()
         if pfUI_config.tooltip.position == "bottom" then
           if pfUI.panel then
-            GameTooltip:SetPoint("BOTTOMRIGHT", pfUI.panel.right, "TOPRIGHT", 0, pfUI_config.appearance.border.default*2 + 163)
+            if pfUI_config.chat.right.enable == "1" then
+              GameTooltip:SetPoint("BOTTOMRIGHT", pfUI.panel.right, "TOPRIGHT", 0, 
+                  pfUI_config.appearance.border.default*2 + pfUI_config.chat.right.height - pfUI.panel.right:GetHeight())
+            else
+              GameTooltip:SetPoint("BOTTOMRIGHT", pfUI.panel.right, "TOPRIGHT", 0, pfUI_config.appearance.border.default*2)
+            end
           else
             GameTooltip:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", 0, -pfUI_config.appearance.border.default*2)
           end

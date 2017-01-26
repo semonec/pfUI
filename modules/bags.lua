@@ -170,7 +170,7 @@ pfUI:RegisterModule("bags", function ()
       if pfUI.chat then
         pfUI.bag.left:SetPoint("BOTTOMLEFT", pfUI.chat.left, "BOTTOMLEFT", 0, 0)
         pfUI.bag.left:SetPoint("BOTTOMRIGHT", pfUI.chat.left, "BOTTOMRIGHT", 0, 0)
-        pfUI.bag.left:SetWidth(pfUI_config.chat.left.width)
+        pfUI.bag.left:SetWidth(pfUI_config.chat.left.width * pfUI.chat.left:GetScale())
       else
         pfUI.bag.left:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 5, 5)
         pfUI.bag.left:SetWidth(pfUI_config.chat.left.width)
@@ -183,7 +183,7 @@ pfUI:RegisterModule("bags", function ()
       if pfUI.chat then
         pfUI.bag.right:SetPoint("BOTTOMLEFT", pfUI.chat.right, "BOTTOMLEFT", 0, 0)
         pfUI.bag.right:SetPoint("BOTTOMRIGHT", pfUI.chat.right, "BOTTOMRIGHT", 0, 0)
-        pfUI.bag.right:SetWidth(pfUI_config.chat.right.width)
+        pfUI.bag.right:SetWidth(pfUI_config.chat.right.width * pfUI.chat.right:GetScale())
       else
         pfUI.bag.right:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 5)
         pfUI.bag.right:SetWidth(pfUI_config.chat.right.width)
@@ -390,14 +390,19 @@ pfUI:RegisterModule("bags", function ()
           frame.bagslots.slots[slot].slot = slot
         end
 
+        local SlotEnter = frame.bagslots.slots[slot].frame:GetScript("OnEnter")
         frame.bagslots.slots[slot].frame:SetScript("OnEnter", function()
           for slot, f in ipairs(pfUI.bags[this.slot + 1].slots) do
             pfUI.api:CreateBackdrop(f.frame, default_border)
             f.frame.backdrop:SetBackdropBorderColor(.2,1,.8,1)
           end
+          SlotEnter()
         end)
+
+        local SlotLeave = frame.bagslots.slots[slot].frame:GetScript("OnLeave")
         frame.bagslots.slots[slot].frame:SetScript("OnLeave", function()
           pfUI.bag:UpdateBag(this.slot + 1)
+          SlotLeave()
         end)
       end
 
